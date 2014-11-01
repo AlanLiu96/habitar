@@ -26,8 +26,8 @@ habitar
 [Alan Liu](https://github.com/AlanLiu96)<br>
 [Cameron Yick](https://github.com/hydrosquall)<br>
 [Grace Li](https://github.com/starfirefly)<br>
-[Megan Valentine](https://github.com/)<br>
 [Summer Wu](https://github.com/sw5813)<br>
+Megan Valentine<br>
 
 
 ## License

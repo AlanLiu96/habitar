@@ -64,13 +64,19 @@ Items = new Meteor.Collection('items');
 
 if (Meteor.isClient) {
 
-	if (Meteor.user()){
-	Meteor.call('updateLastVisit');
-	}
-
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
   });
+
+Deps.autorun(function(){
+  if(Meteor.user()){
+    // login handler
+    Meteor.call('updateLastVisit');
+  }
+  else{
+    // logout handler
+  }
+});
 
     Meteor.subscribe('userData');
     Meteor.subscribe('tasks'); 
@@ -262,6 +268,8 @@ Template.hello.yoUsernameDefault =function(){
 
 if (Meteor.isServer) {
 
+
+
     Meteor.startup(function () {  // code to run on server at startup
 if (Dialog.find().count()==0)
     Meteor.call('addDialog')//populates dialog on first server run
@@ -269,6 +277,15 @@ if (Dialog.find().count()==0)
 
   });
 
+ //  Accounts.onLogin(function(input){
+ //  	// console.log(input);
+ //  	// console.log(this);
+ //  	// if (Session.get('loginStatus')== true)
+	// Meteor.call('updateLastVisit');
+	
+
+	
+ //  });// update Last Visited whenever a user logs in
 
   //facebook login, remove config if it's already there so we insert the new one
 ServiceConfiguration.configurations.remove({
@@ -306,7 +323,7 @@ ServiceConfiguration.configurations.insert({
     if (options.profile){// facebook login
       user.profile=options.profile;
       user.username=options.profile.name;
-      
+
     }
   // console.log(options);
   // console.log(user);
@@ -322,7 +339,7 @@ ServiceConfiguration.configurations.insert({
   user.cAttitude=0;// current attitude 
   user.avatarStage=0;// avatar's stage (from 0 to 3)
   user.daily_yos=0;
-  user.lastVisited= new Date();
+  // user.lastVisited= new Date();
   console.log(user); // test to make sure all of that was stored
   return user;
 })

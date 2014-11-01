@@ -1,6 +1,15 @@
 Meteor.startup(function () {
     // code to run on server at startup
+    later.date.localTime();
+    var task = new ScheduledTask('at 12:00 am', function () {
+    	Meteor.call("resetDailyYos", function(error, result) {
+		  	console.log('successfully reset daily yos to 0, ' + result);
+		});
+	});
+	task.start();
 });
+
+
 
 // APIs
 Meteor.methods({
@@ -19,14 +28,18 @@ Meteor.methods({
 
 	yoHabitar: function (username) {
 		console.log("Yoing habitar");
-		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"wellness": 1}} )
-		Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"daily_yos": 1}}, true)
-	}
+		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"wellness": 1}} );
+		Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"daily_yos": 1}}, true);
+	},
 
-	// every night at midnight- reset daily yos!
+	// every night at midnight- reset daily yos for all users!
+	resetDailyYos: function () {
+		console.log("Resetting daily yos");
+		Meteor.users.update({}, {$set:{"daily_yos": 0}}, { multi: true });
+	},
 
 	// Wolfram Alpha
-	//getNutritionFacts: function (food) {}
+	getNutritionFacts: function (food) {},
 
-	//getFitnessFacts: function (exercise) {}
+	getFitnessFacts: function (exercise) {}
 });

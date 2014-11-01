@@ -1,5 +1,5 @@
 Router.route('/', function () {
-  this.render('home');
+  this.render('Home');
 });
 
 Router.route('/test');
@@ -8,6 +8,7 @@ Router.route('/test');
 Router.route('/yo/:_username', function () {
   var params = this.params; // { _username: "sumwoohoo" }
   var username = params._username; // "sumwoohoo"
+  // store username in mongo database for saying hello to their pet
   console.log(username);
 });
 
@@ -15,5 +16,4 @@ Router.route('/yo/:_username', function () {
 Router.route('/:_userid', function () {
   var params = this.params; // { _userid: "1" }
   var userid = params._userid; // "1"
-  console.log(userid);
 });

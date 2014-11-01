@@ -13,3 +13,5 @@ accounts-ui
 http
 accounts-twitter
 service-configuration
+aldeed:scheduled-tasks
+

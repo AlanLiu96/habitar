@@ -1,19 +1,12 @@
-Template.hello.greeting = function () {
-	return "Welcome to habitar.";
-};
-
-Template.hello.events({
-	'click input': function () {
-  	// template data, if any, is available in 'this'
-  	if (typeof console !== 'undefined')
-    	console.log("You pressed the button");
+// HTML javascript functions
+Template.home.events({
+	'click #yoUser': function () {
+		Meteor.call("yoUser", Meteor.user().yoUsername, function(error, result) {
+		  	console.log('sent yo to user, ' + result);
+		});
 	}
 });
 
-// HTML javascript functions
-Template.Test.events({
-  'click #yoUser': function () {
-  	console.log("yo Summer!");
-    Meteor.call("yoUser", "SUMWOOHOO", "1");
-  }
-});
+Template.home.name = function () {
+	return Meteor.user().profile.name;
+};

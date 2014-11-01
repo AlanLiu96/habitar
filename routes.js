@@ -1,19 +1,17 @@
 Router.route('/', function () {
-  this.render('Home');
+  this.render('index');
 });
 
-Router.route('/test');
+Router.route('/home');
 
-// given a url like "/yo/sumwoohoo"
-Router.route('/yo/:_username', function () {
-  var params = this.params; // { _username: "sumwoohoo" }
-  var username = params._username; // "sumwoohoo"
-  // store username in mongo database for saying hello to their pet
+Router.route('/admin');
+
+// given a url like "/yo/yousername?username=sumwoohoo"
+Router.route('/yo/:_params', function () {
+  var username = this.params.query.username; // "sumwoohoo"
   console.log(username);
-});
-
-// given a url like "/1"
-Router.route('/:_userid', function () {
-  var params = this.params; // { _userid: "1" }
-  var userid = params._userid; // "1"
+  // store username in mongo database for saying hello to their avatar
+  Meteor.call("yoHabitar", username, function(error, result) {
+  	console.log('increased wellness by 1, ' + result);
+  });
 });

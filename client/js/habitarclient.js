@@ -9,3 +9,11 @@ Template.hello.events({
     	console.log("You pressed the button");
 	}
 });
+
+// HTML javascript functions
+Template.Test.events({
+  'click #yoUser': function () {
+  	console.log("yo Summer!");
+    Meteor.call("yoUser", "SUMWOOHOO", "1");
+  }
+});

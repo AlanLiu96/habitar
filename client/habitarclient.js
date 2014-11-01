@@ -9,3 +9,8 @@ Template.hello.events({
     	console.log("You pressed the button");
 	}
 });
+
+Router.map(function(){
+    // routes go here
+    this.route('hello');
+});

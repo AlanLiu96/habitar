@@ -5,3 +5,5 @@
 
 standard-app-packages
 autopublish
+iron:router
+

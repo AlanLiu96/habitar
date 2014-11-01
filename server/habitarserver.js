@@ -2,7 +2,9 @@ Meteor.startup(function () {
     // code to run on server at startup
 });
 
+// APIs
 Meteor.methods({
+	// Yo
 	yoUser: function (username) {
 		console.log("Yoing user");
 		try {
@@ -17,5 +19,14 @@ Meteor.methods({
 
 	yoHabitar: function (username) {
 		console.log("Yoing habitar");
+		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"wellness": 1}} )
+		Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"daily_yos": 1}}, true)
 	}
+
+	// every night at midnight- reset daily yos!
+
+	// Wolfram Alpha
+	//getNutritionFacts: function (food) {}
+
+	//getFitnessFacts: function (exercise) {}
 });

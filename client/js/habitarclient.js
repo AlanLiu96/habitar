@@ -1,8 +1,9 @@
 // HTML javascript functions
 Template.home.events({
 	'click #yoUser': function () {
-		Meteor.call("yoUser", Meteor.user().yoUsername);
-		console.log("should be yoing user");
+		Meteor.call("yoUser", Meteor.user().yoUsername, function(error, result) {
+		  	console.log('sent yo to user, ' + result);
+		});
 	}
 });
 

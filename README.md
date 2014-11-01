@@ -11,3 +11,4 @@ bootstrap
 d3
 http
 jquery
+service-configuration

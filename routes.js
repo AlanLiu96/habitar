@@ -1,4 +1,4 @@
 Router.map(function(){
     // routes go here
-    this.route('hello');
+    this.route('test');
 });

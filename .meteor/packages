@@ -5,3 +5,11 @@
 
 standard-app-packages
 autopublish
+accounts-base
+accounts-facebook
+accounts-google
+accounts-password
+accounts-ui
+http
+accounts-twitter
+service-configuration

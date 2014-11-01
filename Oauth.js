@@ -67,6 +67,7 @@ if (Meteor.isClient) {
 	if (Meteor.user()){
 	Meteor.call('updateLastVisit');
 	}
+
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
   });
@@ -100,8 +101,8 @@ Template.hello.yoUsernameDefault =function(){
   return Meteor.user().yoUsername==""; 
 }
 
-Template.hello.phoneNumDefault =function(){
-  return Meteor.user().phoneNum==""; 
+Template.hello.emailDefault =function(){
+  return Meteor.user().emailNum==""; 
 }
 Template.hello.cAvatarDefault =function(){
   return Meteor.user().cAvatar==0; 
@@ -173,11 +174,11 @@ Template.hello.yoUsernameDefault =function(){
         //document.getElementById("propertyText").value = "";
     },
 
-      'click input.add-phone-num' : function(event){
+      'click input.add-email' : function(event){
         event.preventDefault();
-        var propertyText = document.getElementById("phoneNum").value;
-        Meteor.call("addPhoneNum",propertyText,function(error , propertyText){
-          console.log('added phoneNum with text of  '+propertyText);
+        var propertyText = document.getElementById("email").value;
+        Meteor.call("addEmail",propertyText,function(error , propertyText){
+          console.log('added email with text of  '+propertyText);
         });
         //document.getElementById("propertyText").value = "";
     },
@@ -305,20 +306,23 @@ ServiceConfiguration.configurations.insert({
     if (options.profile){// facebook login
       user.profile=options.profile;
       user.username=options.profile.name;
+      
     }
   // console.log(options);
   // console.log(user);
 
   user.data1 = 0;//test valu
   user.yoUsername="";//user's username for Yo! 
+  user.buddyName ="";
   user.buddyEmail = ""; // acc. buddy email
-  user.phoneNum="";// phone number
+  user.email="";// user's email
   user.cAvatar=0;// current avatar( 1 2 or 3 )
   user.wellness=50;//wellness ( from 50 to 100)
   user.pastAvatars=[];//past avatars
   user.cAttitude=0;// current attitude 
   user.avatarStage=0;// avatar's stage (from 0 to 3)
   user.daily_yos=0;
+  user.lastVisited= new Date();
   console.log(user); // test to make sure all of that was stored
   return user;
 })
@@ -433,9 +437,9 @@ ServiceConfiguration.configurations.insert({
     console.log('Setting Yo Username to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"yoUsername":propertyText}})
   },
-  addPhoneNum : function(propertyText){
+  addEmail : function(propertyText){
     console.log('Setting Phone Number to '+ propertyText);
-    Meteor.users.update({_id:Meteor.user()._id}, {$set:{"phoneNum":propertyText}})
+    Meteor.users.update({_id:Meteor.user()._id}, {$set:{"email":propertyText}})
   },
   setcAvatar : function(propertyText){
     console.log('Setting Current Avatar to '+ propertyText);

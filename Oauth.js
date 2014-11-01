@@ -21,7 +21,7 @@ Template.hello.items = function () {
   return [{name: "Banana", data1: 500}];
 }
 
-Template.hello.players = function () {
+Template.admin.players = function () {
   return Meteor.users.find({}, {sort: {'username': 1}});
 };
 

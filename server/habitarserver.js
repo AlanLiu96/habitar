@@ -3,12 +3,11 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-	yoUser: function (user, user_id) {
+	yoUser: function (username) {
 		console.log("Yoing user");
-		var url = "http://habitar.meteor.com/" + user_id;
 		try {
 			var result = HTTP.call("POST", "https://api.justyo.co/yo/",
-		                       {params: {username: user, api_token: "6c1e9f8b-2f57-4c51-a019-e8f9a39daaa1", link: url}});
+		                       {params: {username: username, api_token: "6c1e9f8b-2f57-4c51-a019-e8f9a39daaa1", link: "http://habitar.meteor.com/home"}});
 			return true;
 		} catch (e) {
 			// Got a network error, time-out or HTTP error in the 400 or 500 range.

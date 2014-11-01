@@ -8,8 +8,7 @@
 </body>
  
 <template name="hello">
-  <h1>Hello World!</h1>
-  {{#if currentUser}}
+{{#if currentUser}}
 
 {{#unless user.property}}
   <textarea rows="3" class="input-xxlarge" name="propertyText" id="propertyText" placeholder="Add a property to user"></textarea>
@@ -53,30 +52,6 @@
 
   {{/if}}
 
-<h3>Test table so we can see all the values</h3>
-  <table class="leaderboard table table-striped">
-  <thead>
-    <th>Username</th>
-    <th>Data1</th>
-    <th>YoUsername</th>
-    <th>buddyEmail</th>
-    <th>phone Number</th>
-    <th>cAvatar</th>
-    <th>wellness</th>
-    <th>pastAvatars</th>
-    <th>cAttitude</th>
-    <th>avatarStage</th>
-    <th>property</th>
-
-  </thead>
-
-  {{#each players}}
-    {{> player}}
-  {{/each}}
-</table>
-  {{greeting}}
-
-  <input type="button" value="Click" />
 </template>
 
 <template name="player">

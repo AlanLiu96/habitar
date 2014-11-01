@@ -1,8 +1,8 @@
 Router.route('/', function () {
-  this.render('Home');
+  this.render('index');
 });
 
-Router.route('/test');
+Router.route('/home');
 
 // given a url like "/yo/sumwoohoo"
 Router.route('/yo/:_username', function () {
@@ -12,8 +12,4 @@ Router.route('/yo/:_username', function () {
   console.log(username);
 });
 
-// given a url like "/1"
-Router.route('/:_userid', function () {
-  var params = this.params; // { _userid: "1" }
-  var userid = params._userid; // "1"
-});
+Router.route('/admin');

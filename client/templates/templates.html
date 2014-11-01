@@ -3,9 +3,11 @@
 </template>
 
 <template name="home">
+{{#if currentUser}}
   <h2>home template</h2>
   <h3>Good Morning, {{ name }}!</h3>
   <button id="yoUser">yo me</button>
+{{/if}}
 </template>
 
 <template name="admin">

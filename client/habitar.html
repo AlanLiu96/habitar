@@ -15,21 +15,59 @@
   <textarea rows="3" class="input-xxlarge" name="propertyText" id="propertyText" placeholder="Add a property to user"></textarea>
   <br/>
   <input type="button" class="btn-info add-property" value="Add Property"/>
+  <br/>
 {{/unless}}
 
-  <h2>You ({{user.username}}) have {{user.data1}} in data one and make {{user.data2}}</h2>
+{{#if buddyEmailDefault}}
+  <textarea rows="1" class="input-xxlarge" id="buddyEmail" placeholder="Add a buddy Email"></textarea>
+  <br/>
+  <input type="button" class="btn-info add-buddy-email" value="Add"/>
+  <br/>
+{{/if}}
+
+{{#if yoUsernameDefault}}
+  <textarea rows="1" class="input-xxlarge" id="yoUsername" placeholder="Add a yo Username"></textarea>
+  <br/>
+  <input type="button" class="btn-info add-yo-username" value="Add"/>
+  <br/>
+{{/if}}
+
+
+{{#if phoneNumDefault}}
+  <textarea rows="1" class="input-xxlarge" id="phoneNum" placeholder="Add a phone Number"></textarea>
+  <br/>
+  <input type="button" class="btn-info add-phone-num" value="Add"/>
+  <br/>
+{{/if}}
+
+
+
+
+
+  <h2>You ({{user.username}}) have avatar number {{user.cAvatar}} and a current wellness of {{user.wellness}} </h2>
   
   <input type="button" class="code btn span4" value="Add one to first data!" />
-	  {{#each items}}
+<!-- 	  {{#each items}}
 	<input type="button" class="subtract btn span4" id="{{data1}}" value="Subtract {{name}} (${{data1}})" />
-	{{/each}}
+	{{/each}} -->
 
   {{/if}}
 
-<h3>Test table so we can see all the values</h3>>
+<h3>Test table so we can see all the values</h3>
   <table class="leaderboard table table-striped">
   <thead>
-    <th>Username</th><th>Data1</th><th>Data2</th><th>property</th>
+    <th>Username</th>
+    <th>Data1</th>
+    <th>YoUsername</th>
+    <th>buddyEmail</th>
+    <th>phone Number</th>
+    <th>cAvatar</th>
+    <th>wellness</th>
+    <th>pastAvatars</th>
+    <th>cAttitude</th>
+    <th>avatarStage</th>
+    <th>property</th>
+
   </thead>
 
   {{#each players}}
@@ -45,7 +83,15 @@
   <tr class="player">
     <td class="name">{{username}}</td>
     <td class="Data1">{{data1}}</td>
-    <td class="Data2">{{data2}}</td>
+    <td>{{yoUsername}}</td>
+    <td>{{buddyEmail}}</td>
+    <td>{{phoneNum}}</td>
+    <td>{{cAvatar}}</td>
+    <td>{{wellness}}</td>
+    <td>{{pastAvatars}}</td>
+    <td>{{cAttitude}}</td>
+    <td>{{avatarStage}}</td>
+    <!-- <td class="Data2">{{data2}}</td> -->
     <td class="property">{{property}}</td>
   </tr>
 </template>

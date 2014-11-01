@@ -41,7 +41,31 @@
 {{/if}}
 
 
+{{#if cAvatarDefault}}
+<h3> Choose your Egg!</h3>
 
+<input type="button" class="btn-info set-cAvatar-1" value="1"/>
+<input type="button" class="btn-info set-cAvatar-2" value="2"/>
+<input type="button" class="btn-info set-cAvatar-3" value="3"/>
+  <!-- <textarea rows="1" class="input-xxlarge" id="phoneNum" placeholder="Add a phone Number"></textarea>
+  <br/>
+  <input type="button" class="btn-info add-phone-num" value="Add"/>
+  <br/> -->
+  <!-- Three Buttons here to choose your cAvatar --> 
+
+{{/if}}
+
+{{#if cAttitudeDefault}}
+<h3>How are you feeling today?</h3>
+<input type="button" class="btn-info set-cAttitude-1" value="Happy (Friendly!)"/>
+<input type="button" class="btn-info set-cAttitude-2" value="Indifferent (Tiger Parents)"/>
+<input type="button" class="btn-info set-cAttitude-3" value="Fun (Sassy)"/>
+  <!-- <textarea rows="1" class="input-xxlarge" id="phoneNum" placeholder="Add a phone Number"></textarea>
+  <br/>
+  <input type="button" class="btn-info add-phone-num" value="Add"/>
+  <br/> -->
+  <!-- Three Buttons here to choose your cAttitude --> 
+{{/if}}
 
 
   <h2>You ({{user.username}}) have avatar number {{user.cAvatar}} and a current wellness of {{user.wellness}} </h2>

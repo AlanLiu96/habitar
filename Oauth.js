@@ -42,11 +42,20 @@ Template.hello.yoUsernameDefault =function(){
 Template.hello.phoneNumDefault =function(){
   return Meteor.user().phoneNum==""; 
 }
+Template.hello.cAvatarDefault =function(){
+  return Meteor.user().cAvatar==0; 
+}
+Template.hello.cAttitudeDefault =function(){
+  return Meteor.user().cAttitude == 0; 
+}
+
+
+
+
 
 Template.hello.yoUsernameDefault =function(){
   return Meteor.user().yoUsername==""; 
 }
-
 
 
 
@@ -91,6 +100,56 @@ Template.hello.yoUsernameDefault =function(){
         });
         //document.getElementById("propertyText").value = "";
     },
+
+      'click input.set-cAvatar-1' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAvatar",1,function(error,propertyText){
+          console.log('set cAvatar to 1 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+      'click input.set-cAvatar-2' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAvatar",2,function(error,propertyText){
+          console.log('set cAvatar to 2 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+
+
+      'click input.set-cAvatar-3' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAvatar",3,function(error,propertyText){
+          console.log('set cAvatar to 3 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+
+      'click input.set-cAttitude-1' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAttitude",1,function(error,propertyText){
+          console.log('set cAttitude to 1 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+      'click input.set-cAttitude-2' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAttitude",2,function(error,propertyText){
+          console.log('set cAttitude to 2 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+
+
+      'click input.set-cAttitude-3' : function(event){
+        event.preventDefault();
+        Meteor.call("setcAttitude",3,function(error,propertyText){
+          console.log('set cAttitude to 3 ');
+        });
+        //document.getElementById("propertyText").value = "";
+    },
+
+
 
 
 
@@ -163,24 +222,32 @@ ServiceConfiguration.configurations.insert({
 });
     Meteor.startup(function () {  // code to run on server at startup
   });
-
+//scheduler, on next day map through users and decrease happiness by certain amount
     Meteor.methods({
   addProperty : function(propertyText){
-    console.log('Setting Property to'+ propertyText);
+    console.log('Setting Property to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"property":propertyText}})
   },
 
   addBuddyEmail : function(propertyText){
-    console.log('Setting Buddy Email to'+ propertyText);
+    console.log('Setting Buddy Email to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"buddyEmail":propertyText}})
   },
   addYoUsername : function(propertyText){
-    console.log('Setting Yo Username to'+ propertyText);
+    console.log('Setting Yo Username to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"yoUsername":propertyText}})
   },
   addPhoneNum : function(propertyText){
-    console.log('Setting Phone Number to'+ propertyText);
+    console.log('Setting Phone Number to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"phoneNum":propertyText}})
+  },
+  setcAvatar : function(propertyText){
+    console.log('Setting Current Avatar to '+ propertyText);
+    Meteor.users.update({_id:Meteor.user()._id}, {$set:{"cAvatar":propertyText}})
+  },
+  setcAttitude : function(propertyText){
+    console.log('Setting Current Attitude to '+ propertyText);
+    Meteor.users.update({_id:Meteor.user()._id}, {$set:{"cAttitude":propertyText}})
   },
 
 });

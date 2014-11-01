@@ -5,6 +5,49 @@ Meteor.methods({
 })
 
 
+Tasks= new Meteor.Collection('tasks');
+    // createdBy: Meteor.user()._id, // put these in the method call
+    //createdAt: new Date(),
+    //name: "This is a sample task. Remember to eat your spinich!",
+    //tagWord:"spinich"
+  //   compDates: [],
+  //   pLevel: 1
+  // });
+Tasks.allow({
+  insert: function (userId, task) {
+    // can only create posts where you are the author
+    return true;// just hard coding this now.
+  },
+  remove: function (userId, task) {
+    // can only delete your own posts
+    return true;
+  }
+  // since there is no update field, all updates
+  // are automatically denied
+});
+ Avatars = new Meteor.Collection('avatars');
+  Dialog = new Meteor.Collection('dialog');
+  Dialog.allow({
+  insert: function (userId, dialog) {
+    // can only create posts where you are the author
+    return true;
+  },
+  remove: function (userId, dialog) {
+    // can only delete your own posts
+    return true;
+  },
+  update:function(userId,dialog){
+    return true;
+  }
+});
+
+
+
+  Streaks = new Meteor.Collection('streaks');
+
+
+
+
 if (Meteor.isClient) {
 
   Accounts.ui.config({
@@ -12,6 +55,9 @@ if (Meteor.isClient) {
   });
 
     Meteor.subscribe('userData');
+    Meteor.subscribe('tasks'); 
+    Meteor.subscribe('dialog');//needs to be subscribed and published for client to see updates to collection
+    // console.log(Tasks);
 
   Template.hello.greeting = function () {
     return "Welcome to habitar.";
@@ -50,6 +96,10 @@ Template.hello.cAttitudeDefault =function(){
 }
 
 
+Template.hello.taskLimit=function(){
+  // console.log("TASK LIMIT" + Tasks.find({},{'createdBy':Meteor.user()._id}).fetch());
+  return (Tasks.find({},{'createdBy':Meteor.user()._id}).count() >= 4)
+}
 
 
 
@@ -72,6 +122,20 @@ Template.hello.yoUsernameDefault =function(){
         });
         //document.getElementById("propertyText").value = "";
     },
+      'click input.add-task' : function(event){// add a property (base code to copy paste)
+        event.preventDefault();
+        var taskText = document.getElementById("taskText").value;
+        var tagWord = document.getElementById("tagWord").value;
+        console.log('attempting to add'+ taskText + tagWord);
+        Meteor.call("addTask",taskText,tagWord, function(error , taskId){
+          console.log('added task with text of .. '+taskId);
+        });
+        document.getElementById("taskText").value = "";
+        document.getElementById("tagWord").value = "";
+    },
+
+
+
 
       'click input.add-buddy-email' : function(event){// maybe add a check for the @?
         event.preventDefault();
@@ -161,9 +225,16 @@ Template.hello.yoUsernameDefault =function(){
 
 
   });
+
+
+
+
 }
 
 if (Meteor.isServer) {
+
+
+
   //facebook login, remove config if it's already there so we insert the new one
 ServiceConfiguration.configurations.remove({
   service: "facebook"
@@ -213,6 +284,7 @@ ServiceConfiguration.configurations.insert({
   user.pastAvatars=[];//past avatars
   user.cAttitude=0;// current attitude 
   user.avatarStage=0;// avatar's stage (from 0 to 3)
+  user.daily_yos=0;
   console.log(user); // test to make sure all of that was stored
   return user;
 })
@@ -220,14 +292,63 @@ ServiceConfiguration.configurations.insert({
   Meteor.publish("userData", function () {
   return Meteor.users.find({}, {sort: {'username': 1}});
 });
+
+
+  Meteor.publish("tasks",function(){
+    return Tasks.find({createdBy: this.userId},{sort:{'createdAt': 1}});
+
+  });
+
+  Meteor.publish('dialog',function(){
+    return Dialog.find({});
+  })
+
+
     Meteor.startup(function () {  // code to run on server at startup
+
+
+if (Dialog.find().count()==0)
+    Meteor.call('addDialog')//populates dialog on first server run
+
   });
 //scheduler, on next day map through users and decrease happiness by certain amount
     Meteor.methods({
+
+  addDialog:function(){
+    console.log('add initial dialog')
+    var dialogId=  Dialog.insert({
+    'greeting': ["Hello!(friendly)", " You have 9 Tasks to do today!(coach)" , "Heyyyyyyy(snarky?)"],
+    'angry': [],
+    'sad': [],
+    'happy': []
+  })
+
+    return dialogId;
+  },
+
   addProperty : function(propertyText){
     console.log('Setting Property to '+ propertyText);
     Meteor.users.update({_id:Meteor.user()._id}, {$set:{"property":propertyText}})
   },
+
+  addTask: function(propertyText, tagWord){
+    console.log('Setting taskText to '+ propertyText +' and tag to ' + tagWord);
+    // Tasks.({}, {$set:{"name":propertyText}, $set:{'tagWord':tagWord}})
+    var taskId = Tasks.insert({
+      'name':propertyText,
+      'createdBy':Meteor.user()._id,
+      'createdAt':new Date(),
+      'tagWord':tagWord,
+      'compDates':[],
+      'pLevel':1,
+      'completed':0
+    })
+    // console.log(Tasks)
+
+    return taskId;
+    // console.log(Tasks);
+  },
+
 
   addBuddyEmail : function(propertyText){
     console.log('Setting Buddy Email to '+ propertyText);

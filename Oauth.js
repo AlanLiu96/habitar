@@ -41,6 +41,20 @@ Tasks.allow({
   }
 });
 
+Items = new Meteor.Collection('items');
+  Items.allow({
+  insert: function (userId, dialog) {
+    // can only create posts where you are the author
+    return true;
+  },
+  remove: function (userId, dialog) {
+    // can only delete your own posts
+    return true;
+  },
+  update:function(userId,dialog){
+    return true;
+  }
+});
 
 
   Streaks = new Meteor.Collection('streaks');
@@ -50,6 +64,9 @@ Tasks.allow({
 
 if (Meteor.isClient) {
 
+	if (Meteor.user()){
+	Meteor.call('updateLastVisit');
+	}
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
   });
@@ -57,15 +74,13 @@ if (Meteor.isClient) {
     Meteor.subscribe('userData');
     Meteor.subscribe('tasks'); 
     Meteor.subscribe('dialog');//needs to be subscribed and published for client to see updates to collection
+    Meteor.subscribe('items');
     // console.log(Tasks);
 
-  Template.hello.greeting = function () {
-    return "Welcome to habitar.";
-    
+ 
+  Template.taskList.items = function () {
+    return Items.find({});
   };
-Template.hello.items = function () {
-  return [{name: "Banana", data1: 500}];
-}
 
 Template.admin.players = function () {
   return Meteor.users.find({}, {sort: {'username': 1}});
@@ -98,7 +113,7 @@ Template.hello.cAttitudeDefault =function(){
 
 Template.hello.taskLimit=function(){
   // console.log("TASK LIMIT" + Tasks.find({},{'createdBy':Meteor.user()._id}).fetch());
-  return (Tasks.find({},{'createdBy':Meteor.user()._id}).count() >= 4)
+  return (Tasks.find({},{'createdBy':Meteor.user()._id}).count() >= 8)//temporarily set to eight for testing
 }
 
 
@@ -132,6 +147,8 @@ Template.hello.yoUsernameDefault =function(){
         });
         document.getElementById("taskText").value = "";
         document.getElementById("tagWord").value = "";
+        if (Items.find().count()<=8 )//populates the List on first call
+			Meteor.call('addItems')
     },
 
 
@@ -209,11 +226,9 @@ Template.hello.yoUsernameDefault =function(){
         event.preventDefault();
         Meteor.call("setcAttitude",3,function(error,propertyText){
           console.log('set cAttitude to 3 ');
-        });
+        });  
         //document.getElementById("propertyText").value = "";
     },
-
-
 
 
 
@@ -226,13 +241,32 @@ Template.hello.yoUsernameDefault =function(){
 
   });
 
+  Template.taskList.events({
+  'click .complete-task': function (event){//checkboxes on the taskList
+    //if document.getElementById('event.target').
+    if (Items.findOne({id:parseInt(event.target.value)}).completed == null || Items.findOne({id:parseInt(event.target.value)}).completed == 0){
+    	console.log('great job finishing the task!')
+	    Items.update({_id:Items.findOne({id:parseInt(event.target.value)})['_id']}, {$inc:{'completed': 1}});
+	    // Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"wellness":[XAMOUNTDEPENDING ON AMT COMPLETED TODAY]}})
+	    Meteor.call('increaseWellness');
+	    //It does a little dance!! 
 
+}
+    // Items.update({_id:Items.findOne({id:event.target.id})['_id']}, {$inc:{completed: 1}});// add 1 to quant
 
+  },
+ });
 
 }
 
 if (Meteor.isServer) {
 
+    Meteor.startup(function () {  // code to run on server at startup
+if (Dialog.find().count()==0)
+    Meteor.call('addDialog')//populates dialog on first server run
+
+
+  });
 
 
   //facebook login, remove config if it's already there so we insert the new one
@@ -303,16 +337,37 @@ ServiceConfiguration.configurations.insert({
     return Dialog.find({});
   })
 
+  Meteor.publish('items',function(){
+  	return Items.find({}, {sort:{'id':1}});
+  })
 
-    Meteor.startup(function () {  // code to run on server at startup
 
-
-if (Dialog.find().count()==0)
-    Meteor.call('addDialog')//populates dialog on first server run
-
-  });
 //scheduler, on next day map through users and decrease happiness by certain amount
     Meteor.methods({
+
+    	increaseWellness:function(){
+    		var completedTasks = 0;
+    		Items.find().forEach(function(item){
+    			completedTasks = completedTasks + item.completed;
+    		})
+    		// console.log(completedTasks);
+    		// completedTasks now has the number of tasks completed today
+    		// this function will only run once every time completedTasks is incremented by 1
+    		if (completedTasks ==2) // if 2 are completed add 10 to wellness
+    			Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"wellness": 10}});
+    		if (completedTasks ==4)// if 4 are completed add 15 in addition to the 10 already added
+    			Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"wellness": 15}})
+    		if (completedTasks ==6) // if 6 are completed add 20 in addition to the 35 already added 
+    			Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"wellness": 20}})
+
+    	},
+
+    	updateLastVisit:function(){
+ 
+				Meteor.users.update({_id:Meteor.user()._id}, {$set:{"lastVisited": new Date()}})
+    		
+
+    	},
 
   addDialog:function(){
     console.log('add initial dialog')
@@ -325,6 +380,26 @@ if (Dialog.find().count()==0)
 
     return dialogId;
   },
+
+  addItems:function(){
+    console.log('adding items ')
+    var i =0;
+    Tasks.find({},{'createdBy':Meteor.user()._id}).forEach(function(task){
+    Items.remove({id:(i+1)});
+    Items.insert({
+    'id': (i+1),
+    'name': task.name,
+    'createdBy':task.createdBy,
+    'compDates':task.compDates,
+    'pLevel':task.pLevel,
+    'completed': 0
+
+  })
+    i++;
+})
+    // return itemId;
+  },
+
 
   addProperty : function(propertyText){
     console.log('Setting Property to '+ propertyText);

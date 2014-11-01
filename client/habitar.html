@@ -4,7 +4,11 @@
 
 <body>
 	{{> loginButtons}}
-    {{> hello}}
+    {{> hello}} <br>
+    {{> taskList}}
+  <!-- REMOVE BELOW THIS LINE BEFORE COMMITTING!!!!! -->
+  <!-- {{> admin}} -->
+
 </body>
  
 <template name="hello">
@@ -67,18 +71,6 @@
   <!-- Three Buttons here to choose your cAttitude --> 
 {{/if}}
 
-  
-{{#if cAttitudeDefault}}
-<h3>How are you feeling today?</h3>
-<input type="button" class="btn-info set-cAttitude-1" value="Happy (Friendly!)"/>
-<input type="button" class="btn-info set-cAttitude-2" value="Indifferent (Tiger Parents)"/>
-<input type="button" class="btn-info set-cAttitude-3" value="Fun (Sassy)"/>
-  <!-- <textarea rows="1" class="input-xxlarge" id="phoneNum" placeholder="Add a phone Number"></textarea>
-  <br/>
-  <input type="button" class="btn-info add-phone-num" value="Add"/>
-  <br/> -->
-  <!-- Three Buttons here to choose your cAttitude --> 
-{{/if}}
 
 {{#unless taskLimit}}
 <h3> Add a Task! </h3>
@@ -116,4 +108,18 @@
     <!-- <td class="Data2">{{data2}}</td> -->
     <td class="property">{{property}}</td>
   </tr>
+</template>
+
+<template name="taskList">
+{{#if currentUser}}
+    {{#each items}}
+      {{> item}}
+    {{/each}}
+{{/if}}
+</template>
+
+<template name='item'>
+
+<input type="checkbox" id="item{{id}}" class= 'complete-task' name = "item{{id}}" value ='{{id}}'>{{name}} (Task number {{id}})<br>
+
 </template>

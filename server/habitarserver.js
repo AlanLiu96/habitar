@@ -1,17 +1,19 @@
 Meteor.startup(function () {
     // code to run on server at startup
     later.date.localTime();
-    var resetYos = new ScheduledTask('at 11:59 pm', function () {
+    var dailyReset = new ScheduledTask('at 11:59 pm', function () {
     	Meteor.call("resetDailyYos", function(error, result) {
 		  	console.log('successfully reset daily yos to 0, ' + result);
 		});
+
+    	// reset coach personality
+		Meteor.users.update({}, {$set:{"cAttitude": 0}}, { multi: true });
+
+		// Wellness- mapping function from tasks- add up all values completed (>40%, add or subtract from wellness)
+
 	});
-	resetYos.start();
-/*
-	Meteor.call("getFacts", "push ups", "fitness", function(error, result) {
-	  	console.log('finished searching for facts on wolfram alpha, ' + result);
-	});
-*/
+	dailyReset.start();
+
 	var sendReminderYos = new ScheduledTask('at 8:00 pm', function () {
 		Meteor.call("sendReminderYos", function(error, result) {
 			console.log('successfully sent all reminder yos for the day, ' + result);
@@ -39,7 +41,7 @@ Meteor.methods({
 	yoHabitar: function (username) {
 		console.log("Yoing habitar");
 		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"wellness": 1}});
-		Meteor.users.update({_id: Meteor.user()._id}, {$inc:{"daily_yos": 1}});
+		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"daily_yos": 1}});
 	},
 
 	// every night at midnight- reset daily yos for all users!
@@ -97,11 +99,10 @@ Meteor.methods({
 				var fact = "Doing " + subject + " for just one minute burns " + cal_per_min + " calories- you got this!";
 			}
 			console.log(fact);
-
-			return true;
+			return fact;
 		} catch (e) {
 			// Got a network error, time-out or HTTP error in the 400 or 500 range.
-			return false;
+			return e;
 		}
 	}
 });
@@ -121,5 +122,3 @@ function randomKey(obj) {
            ret = key;
     return ret;
 }
-
-

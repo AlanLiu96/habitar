@@ -28,6 +28,11 @@ Meteor.startup(function () {
 			} else if (fraction > 0.4) {
 				Meteor.users.update({}. user.wellness + (fraction)*10);
 			}
+			if (user.wellness <= 20) {
+				Meteor.call("yoUser", user.yoUsername, function(error, result) {
+					console.log("successfully yo'd user, " + result);
+				});
+			}
 		}
 		Tasks.update({}, {$set:{"completed": 0}}, { multi: true });
 	});

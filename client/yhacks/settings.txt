@@ -1,0 +1,61 @@
+<script>
+$('.ui.accordion').accordion();
+</script>
+
+<style>
+label {font-weight: bold;}
+</style>
+
+<div class="ui fluid accordion">
+  <div class="active title">
+    <i class="dropdown icon"></i>
+    Change Password
+  </div>
+  <div class="active content">
+    <div class="ui form" id="change_password">
+      <div class="field">
+        <label>Current Password</label>
+        <input type="text">
+      </div>
+      <div class="field">
+        <label>New Password</label>
+        <input type="text">
+      </div>
+      <div class="field">
+        <label>Confirm New Password</label>
+        <input type="text">
+      </div>
+    </div>
+    <div class="ui purple submit button">Change Password</div>      
+  </div>
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Change Yo Account
+  </div>
+  <div class="content">
+      <div class="ui form" id="change_password">
+          <div class="field">
+            <label>Yo Account</label>
+            <input type="text">
+          </div>
+      </div>
+      <div class="ui submit button" style="background-color: #9B59B6; color: #ffffff">Change</div>      
+  </div>
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Change Accountability Buddy
+  </div>
+  <div class="content">
+       <div class="ui form" id="change_password">
+          <div class="field">
+            <label>Accountability Buddy Name</label>
+            <input type="text">
+          </div>
+          <div class="field">
+            <label>Accountability Buddy Email</label>
+            <input type="text">
+          </div>
+      </div>
+      <div class="ui submit button" style="background-color: #BDA0CB; color: #ffffff">Change</div> 
+  </div>
+</div>

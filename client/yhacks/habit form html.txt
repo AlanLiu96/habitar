@@ -1,0 +1,72 @@
+<div class="ui form">
+  <p style="font-weight:bold; font-size: 150%">Pick Your Habit<p>
+  <div class="field">
+    <label>Improve yourself! What new habit will you start?</label>
+    <textarea id="habit"></textarea>
+  </div>
+    
+  <div class="inline field">
+    <label>Keyword (optional)</label>
+    <input type="text" placeholder="keyword" id="keyword">
+    <i class="large info icon link" data-position="right center"></i>
+  </div>
+  
+  <div>My new habit will be a(n)
+      <div class="ui inline dropdown" id="habit_type" data-position="top right" data-offset="35">
+        <div class="text">select</div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item" data-value="food goal">food goal</div>
+          <div class="item" data-value="exercise goal">exercise goal</div>
+          <div class="item" data-value="other goal">other goal</div>
+        </div>
+      </div>
+    </div>
+      
+   <br>
+   <p style="font-weight:bold; font-size: 150%">How Often Will Your Habit Be?<p>
+   <div class="grouped inline fields">
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="time_frame" value="daily" checked="">
+        <label>Daily</label>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="time_frame" value="weekly">
+        <label>Weekly</label>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="time_frame" value="custom">
+        <label>Custom:</label>
+      </div>
+    </div> 
+   </div>
+        
+   <div id="custom_form">
+      <div class="inline fields">
+        <div class="field">
+          <label>Once every</label>
+            <input type="text" placeholder="number of days/weeks" id="custom_number">
+        </div>
+        <div class="field">
+          <div class="ui inline dropdown" style="padding-top: 10px" id="freq_type">
+            <div class="text">days</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item active" data-text="days">days</div>
+              <div class="item" data-text="weeks">weeks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+       
+    <div class="ui blue submit button">Submit</div>       
+</div>
+<div>
+    <p id="errors" style="color:red"></p>
+</div>

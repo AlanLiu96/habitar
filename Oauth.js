@@ -72,6 +72,10 @@ Deps.autorun(function(){
   if(Meteor.user()){
     // login handler
     Meteor.call('updateLastVisit');
+    // Items.remove();
+    if (Tasks.find().count() != Items.find().count())//temporary fix 
+    	Meteor.call('addItems'); 
+    
   }
   else{
     // logout handler
@@ -120,7 +124,7 @@ Template.hello.cAttitudeDefault =function(){
 
 Template.hello.taskLimit=function(){
   // console.log("TASK LIMIT" + Tasks.find({},{'createdBy':Meteor.user()._id}).fetch());
-  return (Tasks.find({},{'createdBy':Meteor.user()._id}).count() >= 8)//temporarily set to eight for testing
+  return (Tasks.find({},{'createdBy':Meteor.user()._id}).count() >= 5)//temporarily set to eight for testing
 }
 
 
@@ -154,10 +158,18 @@ Template.hello.yoUsernameDefault =function(){
         });
         document.getElementById("taskText").value = "";
         document.getElementById("tagWord").value = "";
-        if (Items.find().count()<=8 )//populates the List on first call
+        if (Items.find().count()<=5 )//populates the List on first call
 			Meteor.call('addItems')
     },
 
+
+'submit form': function(event){
+	console.log('initial settings form is being submitted')
+	event.preventDefault();
+    event.stopPropagation();
+
+
+},
 
 
 
@@ -268,7 +280,11 @@ Template.hello.yoUsernameDefault =function(){
 
 if (Meteor.isServer) {
 
+// Accounts.onLogin(function (event){
+// 	console.log(event)
+// 	Items.remove( {'createdBy':not(Meteor.user()._id) });
 
+// })
 
     Meteor.startup(function () {  // code to run on server at startup
 if (Dialog.find().count()==0)
@@ -318,7 +334,7 @@ ServiceConfiguration.configurations.insert({
 });
 
 
-//Default Values on user creation
+//Default Values on user creation // USER CREATION IS DISABLED FOR SIGN UP FORM
   Accounts.onCreateUser(function(options, user) {
     if (options.profile){// facebook login
       user.profile=options.profile;
@@ -339,7 +355,8 @@ ServiceConfiguration.configurations.insert({
   user.cAttitude=0;// current attitude 
   user.avatarStage=0;// avatar's stage (from 0 to 3)
   user.daily_yos=0;
-  // user.lastVisited= new Date();
+  user.lastVisited= new Date();
+  user.taskList=[];
   console.log(user); // test to make sure all of that was stored
   return user;
 })
@@ -405,7 +422,8 @@ ServiceConfiguration.configurations.insert({
   addItems:function(){
     console.log('adding items ')
     var i =0;
-    Tasks.find({},{'createdBy':Meteor.user()._id}).forEach(function(task){
+    // console.log(Tasks.find({'createdBy':Meteor.user()._id}));
+    Tasks.find({'createdBy':Meteor.user()._id}).forEach(function(task){
     Items.remove({id:(i+1)});
     Items.insert({
     'id': (i+1),
@@ -439,6 +457,7 @@ ServiceConfiguration.configurations.insert({
       'pLevel':1,
       'completed':0
     })
+    Meteor.users.update({_id:Meteor.user()._id}, {$set:{"taskList":Meteor.user().taskList.push("taskId")}});
     // console.log(Tasks)
 
     return taskId;

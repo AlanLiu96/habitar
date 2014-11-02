@@ -9,8 +9,27 @@ Meteor.startup(function () {
     	// reset coach personality
 		Meteor.users.update({}, {$set:{"cAttitude": 0}}, { multi: true });
 
-		// Wellness- mapping function from tasks- add up all values completed (>40%, add or subtract from wellness)
-
+		// Adjust wellness- add up # tasks completed (40% = same, <40% = subtract, >40% = add)
+		var users = Meteor.users.find();
+		var count = users.count();
+		for (i = 0; i < count; i++) {
+			var user = users.fetch()[i];
+			var total_tasks = 0;
+			var tasks_completed = 0;
+			Tasks.find({'createdBy':user._id}).forEach(function(task) {
+				total_tasks++;
+				if (task.completed == 1) {
+					tasks_completed++;
+				}
+			});
+			var fraction = tasks_completed/total_tasks;
+			if (fraction < 0.4) {
+				Meteor.users.update({_id: user._id}, {$set:{"wellness": user.wellness - (1 - fraction)*10}});
+			} else if (fraction > 0.4) {
+				Meteor.users.update({}. user.wellness + (fraction)*10);
+			}
+		}
+		Tasks.update({}, {$set:{"completed": 0}}, { multi: true });
 	});
 	dailyReset.start();
 

@@ -8,8 +8,8 @@ Meteor.methods({
 Tasks= new Meteor.Collection('tasks');
     // createdBy: Meteor.user()._id, // put these in the method call
     //createdAt: new Date(),
-    //name: "This is a sample task. Remember to eat your spinich!",
-    //tagWord:"spinich"
+    //name: "This is a sample task. Remember to eat your spinach!",
+    //tagWord:"spinach"
   //   compDates: [],
   //   pLevel: 1
   // });

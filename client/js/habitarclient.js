@@ -11,9 +11,11 @@ Template.home.helpers({
 
 	quote: function () {
 		// get a wolfram alpha fact for an uncompleted food or fitness task
-		//Meteor.users.find
-
-		var task = "push ups";
+		var unfinished = Tasks.find({$and:[{'createdBy':Meteor.user()._id}, {'completed':0}]});
+		var count = unfinished.count();
+		var selection = Math.round(Math.random()*count);
+		var task = unfinished.fetch()[selection].tagWord;
+		console.log(task);
 		var category = "fitness";
 
 		var fact = Meteor.call("getFacts", task, category, function(error, result) {
@@ -27,3 +29,4 @@ Template.home.helpers({
 		return Session.get('q');
 	}
 });
+

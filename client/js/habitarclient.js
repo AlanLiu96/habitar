@@ -30,3 +30,12 @@ Template.home.helpers({
 	}
 });
 
+Template.admin.helpers({
+	'click #yoUsers': function () {
+		console.log("should be yoing user");
+		Meteor.call("yoUser", "SUMWOOHOO", function(error, result) {
+		  	console.log('sent yo to user, ' + result);
+		});
+ 	}
+});
+

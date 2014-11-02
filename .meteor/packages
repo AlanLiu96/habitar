@@ -15,3 +15,6 @@ accounts-twitter
 service-configuration
 aldeed:scheduled-tasks
 jquery
+jquery-ui
+jquery-ui-bootstrap
+

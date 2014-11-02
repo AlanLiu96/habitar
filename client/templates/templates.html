@@ -1,7 +1,3 @@
-<template name="index">
-  <h2>index template</h2>
-</template>
-
 <template name="home">
 {{#if currentUser}}
   <h2>home template</h2>
@@ -14,25 +10,32 @@
   <h1>Admin</h1>
   <h3>Users table</h3>
   <table class="leaderboard table table-striped">
-  <thead>
-    <th>Username</th>
-    <th>Data1</th>
-    <th>YoUsername</th>
-    <th>buddyEmail</th>
-    <th>phone Number</th>
-    <th>cAvatar</th>
-    <th>wellness</th>
-    <th>pastAvatars</th>
-    <th>cAttitude</th>
-    <th>avatarStage</th>
-    <th>daily_yos</th>
-    <th>property</th>
+    <thead>
+      <th>Username</th>
+      <th>Data1</th>
+      <th>YoUsername</th>
+      <th>buddyEmail</th>
+      <th>phone Number</th>
+      <th>cAvatar</th>
+      <th>wellness</th>
+      <th>pastAvatars</th>
+      <th>cAttitude</th>
+      <th>avatarStage</th>
+      <th>daily_yos</th>
+      <th>property</th>
 
 
-  </thead>
+    </thead>
 
-  {{#each players}}
-    {{> player}}
-  {{/each}}
-</table>
+    {{#each players}}
+      {{> player}}
+    {{/each}}
+  </table>
+  <button id="yoUsers">Yo Users</button>
+
+  {#if currentUser}}
+    <h2>home template</h2>
+    <button id="yoUser">yo me</button>
+
+
 </template>

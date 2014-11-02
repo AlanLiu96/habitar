@@ -1,17 +1,17 @@
-<head>
-  <title>habitar</title>
-</head>
+ <template name="hello">
+  <head>
+    <title>habitar</title>
+  </head>
 
-<body>
-	{{> loginButtons}}
-    {{> hello}} <br>
-    {{> taskList}}
-  <!-- REMOVE BELOW THIS LINE BEFORE COMMITTING!!!!! -->
-  {{> admin}}
+  <body>
+    {{> loginButtons}}
+      {{> hello}} <br>
+      {{> taskList}}
+    <!-- REMOVE BELOW THIS LINE BEFORE COMMITTING!!!!! -->
+    {{> admin}}
 
-</body>
- 
-<template name="hello">
+  </body>
+
 {{#if currentUser}}
   <h2>Edit Profile</h2>
 

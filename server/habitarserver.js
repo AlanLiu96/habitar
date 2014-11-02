@@ -1,17 +1,23 @@
 Meteor.startup(function () {
     // code to run on server at startup
     later.date.localTime();
-    var task = new ScheduledTask('at 11:59 pm', function () {
+    var resetYos = new ScheduledTask('at 11:59 pm', function () {
     	Meteor.call("resetDailyYos", function(error, result) {
 		  	console.log('successfully reset daily yos to 0, ' + result);
 		});
 	});
-	task.start();
+	resetYos.start();
 /*
 	Meteor.call("getFacts", "push ups", "fitness", function(error, result) {
 	  	console.log('finished searching for facts on wolfram alpha, ' + result);
 	});
 */
+	var sendReminderYos = new ScheduledTask('at 8:00 pm', function () {
+		Meteor.call("sendReminderYos", function(error, result) {
+			console.log('successfully sent all reminder yos for the day, ' + result);
+		});
+	});
+	sendReminderYos.start();
 });
 
 
@@ -22,7 +28,7 @@ Meteor.methods({
 		console.log("Yoing user");
 		try {
 			var result = HTTP.call("POST", "https://api.justyo.co/yo/",
-		                       {params: {username: username, api_token: "6c1e9f8b-2f57-4c51-a019-e8f9a39daaa1", link: "http://habitar.meteor.com/home"}});
+		                       {params: {username: username, api_token: "6c1e9f8b-2f57-4c51-a019-e8f9a39daaa1", link: "http://habitar.me/home"}});
 			return true;
 		} catch (e) {
 			// Got a network error, time-out or HTTP error in the 400 or 500 range.
@@ -33,13 +39,34 @@ Meteor.methods({
 	yoHabitar: function (username) {
 		console.log("Yoing habitar");
 		Meteor.users.update({_id: Meteor.user()._id}, {$inc: {"wellness": 1}});
-		Meteor.users.update({_id:Meteor.user()._id}, {$inc:{"daily_yos": 1}});
+		Meteor.users.update({_id: Meteor.user()._id}, {$inc:{"daily_yos": 1}});
 	},
 
 	// every night at midnight- reset daily yos for all users!
 	resetDailyYos: function () {
 		console.log("Resetting daily yos");
 		Meteor.users.update({}, {$set:{"daily_yos": 0}}, { multi: true });
+	},
+
+	// send reminder yos
+	sendReminderYos: function() {
+		// Send user a yo at 8pm if they haven't checked on their habitar all day; note: in the future, the time can be changed in settings!
+		// Return today's date and time
+		var currentTime = new Date();
+		// returns the month (from 0 to 11)
+		var month = currentTime.getMonth();
+		// returns the day of the month (from 1 to 31)
+		var day = currentTime.getDate();
+		// returns the year (four digits)
+		var year = new Date().getFullYear();
+		var users = Meteor.users.find({"lastVisited": {"$not": {"$gte": new Date(year, month, day), "$lt": new Date(year, month, day + 1)}}});
+		var count = users.count();
+		console.log(count + " users " + users);
+		for (i = 0; i < count; i++) {
+			Meteor.call("yoUser", users.fetch()[i].yoUsername, function(error, result) {
+				console.log("successfully yo'd users, " + result);
+			});
+		}
 	},
 
 	// Wolfram Alpha
